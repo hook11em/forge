@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forge — Venture Command Center</title>
-  <meta name="description" content="Forge is an AI venture lab for discovering, validating, and operating digital businesses." />
+  <meta name="description" content="Forge is an AI venture lab for discovering, validating, and operating low-touch digital businesses." />
   <style>
     :root {
       --bg: #08111f;
       --panel: #0d1728;
       --panel-2: #111e33;
+      --panel-3: #14243d;
       --line: rgba(255,255,255,.08);
       --text: #f6f8fc;
       --muted: #94a3b8;
@@ -20,7 +21,6 @@
       --red: #ff6b7a;
       --shadow: 0 24px 80px rgba(0,0,0,.32);
     }
-
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -33,264 +33,138 @@
         radial-gradient(circle at 85% 15%, rgba(124,140,255,.12), transparent 24%),
         var(--bg);
     }
-
-    button, input { font: inherit; }
+    button, input, textarea, select { font: inherit; }
     button { cursor: pointer; }
-
-    .app {
-      display: grid;
-      grid-template-columns: 248px 1fr;
-      min-height: 100vh;
-    }
-
+    .app { display: grid; grid-template-columns: 236px 1fr; min-height: 100vh; }
     .sidebar {
       border-right: 1px solid var(--line);
-      background: rgba(8,17,31,.82);
+      background: rgba(8,17,31,.88);
       backdrop-filter: blur(18px);
       padding: 24px 18px;
       position: sticky;
       top: 0;
       height: 100vh;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 4px 8px 26px;
-      font-weight: 800;
-      letter-spacing: -.02em;
-      font-size: 20px;
-    }
-
+    .brand { display: flex; align-items: center; gap: 12px; padding: 4px 8px 26px; font-weight: 800; letter-spacing: -.02em; font-size: 20px; }
     .mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 11px;
+      width: 34px; height: 34px; border-radius: 11px;
       background: linear-gradient(145deg, var(--accent), var(--accent-2));
       box-shadow: 0 10px 30px rgba(92,200,255,.25);
-      display: grid;
-      place-items: center;
-      color: #07111d;
-      font-weight: 900;
+      display: grid; place-items: center; color: #07111d; font-weight: 900;
     }
-
-    .nav-label {
-      margin: 18px 10px 8px;
-      color: #60708b;
-      font-size: 11px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-
+    .nav-label { margin: 18px 10px 8px; color: #60708b; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; }
     .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 11px 12px;
-      color: var(--muted);
-      border-radius: 12px;
-      margin: 4px 0;
-      text-decoration: none;
-      transition: .2s ease;
+      display: flex; align-items: center; gap: 11px; width: 100%;
+      padding: 11px 12px; color: var(--muted); border-radius: 12px; margin: 4px 0;
+      border: 0; background: transparent; text-align: left; transition: .2s ease;
     }
-
-    .nav-item:hover, .nav-item.active {
-      color: var(--text);
-      background: linear-gradient(90deg, rgba(92,200,255,.12), rgba(124,140,255,.08));
-    }
-
+    .nav-item:hover, .nav-item.active { color: var(--text); background: linear-gradient(90deg, rgba(92,200,255,.12), rgba(124,140,255,.08)); }
     .sidebar-footer {
-      position: absolute;
-      left: 18px;
-      right: 18px;
-      bottom: 18px;
-      padding: 14px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      border-radius: 16px;
+      position: absolute; left: 18px; right: 18px; bottom: 18px; padding: 14px;
+      border: 1px solid var(--line); background: rgba(255,255,255,.03); border-radius: 16px;
     }
-
     .sidebar-footer strong { display: block; font-size: 13px; }
     .sidebar-footer span { color: var(--muted); font-size: 12px; }
-
     .main { padding: 26px 30px 44px; max-width: 1500px; width: 100%; margin: 0 auto; }
-
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 18px;
-      margin-bottom: 28px;
-    }
-
-    .eyebrow {
-      color: var(--accent);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(28px, 4vw, 46px);
-      letter-spacing: -.04em;
-      line-height: 1.05;
-    }
-
-    .sub {
-      margin-top: 10px;
-      color: var(--muted);
-      max-width: 660px;
-      line-height: 1.6;
-    }
-
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-bottom: 28px; }
+    .eyebrow { color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; margin-bottom: 6px; }
+    h1 { margin: 0; font-size: clamp(28px, 4vw, 46px); letter-spacing: -.04em; line-height: 1.05; }
+    .sub { margin-top: 10px; color: var(--muted); max-width: 690px; line-height: 1.6; }
     .top-actions { display: flex; gap: 10px; }
-
     .btn {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,.04);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 11px 14px;
-      font-weight: 700;
+      border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--text);
+      border-radius: 12px; padding: 11px 14px; font-weight: 700;
     }
-
-    .btn.primary {
-      border: 0;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #06111d;
-      box-shadow: 0 12px 32px rgba(92,200,255,.22);
-    }
-
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary { border: 0; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #06111d; box-shadow: 0 12px 32px rgba(92,200,255,.22); }
+    .btn.danger { color: #ffd7dc; border-color: rgba(255,107,122,.25); }
     .grid { display: grid; gap: 16px; }
     .metrics { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 16px; }
-
     .card {
       border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(17,30,51,.88), rgba(13,23,40,.88));
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      padding: 18px;
+      background: linear-gradient(180deg, rgba(17,30,51,.9), rgba(13,23,40,.9));
+      border-radius: 20px; box-shadow: var(--shadow); padding: 18px;
     }
-
     .metric-label { color: var(--muted); font-size: 13px; }
     .metric-value { margin-top: 12px; font-size: 30px; font-weight: 800; letter-spacing: -.04em; }
     .metric-note { margin-top: 8px; font-size: 12px; color: var(--green); }
-
     .dashboard { grid-template-columns: 1.35fr .85fr; align-items: start; }
-
-    .section-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 14px;
-    }
-
+    .section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
     .section-head h2 { margin: 0; font-size: 18px; letter-spacing: -.02em; }
     .section-head span { color: var(--muted); font-size: 12px; }
-
     .venture {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 14px;
-      align-items: center;
-      padding: 15px 0;
-      border-top: 1px solid var(--line);
+      display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center;
+      padding: 15px 0; border-top: 1px solid var(--line);
     }
-
     .venture:first-of-type { border-top: 0; }
-    .venture-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: rgba(92,200,255,.11);
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-    }
+    .venture-icon { width: 44px; height: 44px; border-radius: 14px; background: rgba(92,200,255,.11); display: grid; place-items: center; font-size: 20px; }
     .venture strong { display: block; }
     .venture small { color: var(--muted); }
     .score { text-align: right; font-weight: 800; }
     .score small { display: block; font-weight: 500; color: var(--muted); }
-
-    .recommendation {
-      padding: 14px;
-      border: 1px solid var(--line);
-      border-radius: 15px;
-      background: rgba(255,255,255,.025);
-      margin-top: 10px;
-    }
-
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .09em;
-      color: var(--accent);
-      font-weight: 800;
-    }
-
+    .recommendation { padding: 14px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.025); margin-top: 10px; }
+    .tag { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; text-transform: uppercase; letter-spacing: .09em; color: var(--accent); font-weight: 800; }
     .recommendation h3 { margin: 9px 0 7px; font-size: 16px; }
     .recommendation p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
-
-    .status-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 13px 0;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 13px;
-    }
-
+    .status-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
     .status-row:first-of-type { border-top: 0; }
-    .pill {
-      padding: 5px 9px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--green);
-      background: rgba(67,209,158,.1);
-    }
-
-    .activity {
-      margin-top: 16px;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .activity-item {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 12px;
-      padding: 12px 0;
-      border-top: 1px solid var(--line);
-    }
-
+    .pill { padding: 5px 9px; border-radius: 999px; font-size: 11px; font-weight: 800; color: var(--green); background: rgba(67,209,158,.1); }
+    .activity { margin-top: 16px; grid-template-columns: 1fr 1fr; }
+    .activity-item { display: grid; grid-template-columns: auto 1fr; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
     .activity-item:first-of-type { border-top: 0; }
-    .dot {
-      width: 9px;
-      height: 9px;
-      margin-top: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 5px rgba(92,200,255,.08);
-    }
+    .dot { width: 9px; height: 9px; margin-top: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 5px rgba(92,200,255,.08); }
     .activity-item p { margin: 0; font-size: 13px; }
     .activity-item small { color: var(--muted); }
-
-    .empty {
-      text-align: center;
-      padding: 24px 10px 6px;
-      color: var(--muted);
-      font-size: 13px;
+    .empty { text-align: center; padding: 28px 12px; color: var(--muted); font-size: 13px; border: 1px dashed var(--line); border-radius: 14px; }
+    .view { display: none; }
+    .view.active { display: block; }
+    .page-head { margin-bottom: 20px; }
+    .page-head h2 { margin: 0; font-size: 30px; letter-spacing: -.03em; }
+    .page-head p { color: var(--muted); margin: 7px 0 0; }
+    .venture-grid, .opportunity-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .venture-card h3, .opportunity-card h3 { margin: 10px 0 8px; }
+    .venture-card p, .opportunity-card p { color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+    .chip { font-size: 11px; padding: 6px 9px; border-radius: 999px; color: #bcd8ff; background: rgba(92,200,255,.09); border: 1px solid rgba(92,200,255,.12); }
+    .card-actions { display: flex; gap: 8px; margin-top: 16px; }
+    .card-actions .btn { flex: 1; padding: 9px 10px; }
+    .report-box { white-space: pre-wrap; color: #dbe7f8; line-height: 1.7; }
+    .modal-backdrop {
+      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+      padding: 18px; background: rgba(2,8,18,.72); backdrop-filter: blur(8px); z-index: 50;
     }
-
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      width: min(720px, 100%); max-height: 92vh; overflow: auto;
+      border: 1px solid var(--line); border-radius: 22px;
+      background: linear-gradient(180deg, #122139, #0a1424);
+      box-shadow: 0 30px 120px rgba(0,0,0,.55); padding: 22px;
+    }
+    .modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 18px; }
+    .modal-head h2 { margin: 0; }
+    .icon-btn { border: 1px solid var(--line); background: rgba(255,255,255,.04); color: var(--text); border-radius: 10px; padding: 7px 10px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field { display: grid; gap: 7px; }
+    .field.full { grid-column: 1 / -1; }
+    label { color: #c7d4e7; font-size: 12px; font-weight: 700; }
+    input, textarea, select {
+      width: 100%; border: 1px solid var(--line); border-radius: 12px;
+      background: rgba(255,255,255,.045); color: var(--text); padding: 11px 12px; outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: rgba(92,200,255,.55); box-shadow: 0 0 0 3px rgba(92,200,255,.08); }
+    textarea { min-height: 92px; resize: vertical; }
+    option { background: #0d1728; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+    .toast {
+      position: fixed; right: 20px; bottom: 20px; z-index: 80;
+      padding: 12px 14px; border: 1px solid var(--line); border-radius: 12px;
+      background: #10213a; color: var(--text); box-shadow: var(--shadow);
+      opacity: 0; transform: translateY(10px); pointer-events: none; transition: .25s ease;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 1080px) {
+      .venture-grid, .opportunity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
     @media (max-width: 980px) {
       .app { grid-template-columns: 1fr; }
       .sidebar { display: none; }
@@ -298,12 +172,12 @@
       .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .dashboard, .activity { grid-template-columns: 1fr; }
     }
-
-    @media (max-width: 560px) {
+    @media (max-width: 650px) {
       .topbar { align-items: flex-start; flex-direction: column; }
       .top-actions { width: 100%; }
       .top-actions .btn { flex: 1; }
-      .metrics { grid-template-columns: 1fr; }
+      .metrics, .venture-grid, .opportunity-grid, .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
     }
   </style>
 </head>
@@ -313,156 +187,440 @@
       <div class="brand"><div class="mark">F</div> Forge</div>
 
       <div class="nav-label">Command Center</div>
-      <a class="nav-item active" href="#">◫ Overview</a>
-      <a class="nav-item" href="#">◆ Ventures</a>
-      <a class="nav-item" href="#">✦ Opportunities</a>
-      <a class="nav-item" href="#">◎ Research</a>
+      <button class="nav-item active" data-view="overview">◫ Overview</button>
+      <button class="nav-item" data-view="ventures">◆ Ventures</button>
+      <button class="nav-item" data-view="opportunities">✦ Opportunities</button>
+      <button class="nav-item" data-view="research">◎ Research</button>
 
       <div class="nav-label">AI Team</div>
-      <a class="nav-item" href="#">◉ Executive Agents</a>
-      <a class="nav-item" href="#">⚙ Automations</a>
-      <a class="nav-item" href="#">▤ Reports</a>
+      <button class="nav-item" data-view="agents">◉ Executive Agents</button>
+      <button class="nav-item" data-view="automations">⚙ Automations</button>
+      <button class="nav-item" data-view="reports">▤ Reports</button>
 
       <div class="sidebar-footer">
-        <strong>Forge Labs v0.1</strong>
-        <span>Internal venture operating system</span>
+        <strong>Forge Labs v0.2</strong>
+        <span>Local-first venture operating system</span>
       </div>
     </aside>
 
     <main class="main">
-      <div class="topbar">
-        <div>
-          <div class="eyebrow">Board Dashboard</div>
-          <h1>Good evening, Matt.</h1>
-          <div class="sub">Forge is ready to research opportunities, score ideas, and turn the best ones into low-touch digital ventures.</div>
+      <section id="overview" class="view active">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Board Dashboard</div>
+            <h1 id="greeting">Good evening, Matt.</h1>
+            <div class="sub">Forge is ready to research opportunities, score ideas, and turn the best ones into low-touch digital ventures.</div>
+          </div>
+          <div class="top-actions">
+            <button class="btn" id="reportBtn">View report</button>
+            <button class="btn primary open-venture">+ New venture</button>
+          </div>
         </div>
-        <div class="top-actions">
-          <button class="btn" id="reportBtn">View report</button>
-          <button class="btn primary" id="ventureBtn">+ New venture</button>
-        </div>
-      </div>
 
-      <section class="grid metrics">
-        <div class="card">
-          <div class="metric-label">Opportunities analyzed</div>
-          <div class="metric-value">24</div>
-          <div class="metric-note">+8 this week</div>
+        <section class="grid metrics">
+          <div class="card"><div class="metric-label">Opportunities analyzed</div><div class="metric-value" id="opportunityCount">24</div><div class="metric-note">Curated starting set</div></div>
+          <div class="card"><div class="metric-label">Ideas shortlisted</div><div class="metric-value" id="shortlistCount">6</div><div class="metric-note">Top score: 92</div></div>
+          <div class="card"><div class="metric-label">Active ventures</div><div class="metric-value" id="ventureCount">0</div><div class="metric-note" id="ventureNote">Ready to select #1</div></div>
+          <div class="card"><div class="metric-label">Monthly operating cost</div><div class="metric-value">$0</div><div class="metric-note">Free-tier target</div></div>
+        </section>
+
+        <section class="grid dashboard">
+          <div class="card">
+            <div class="section-head"><h2>Top opportunities</h2><span>AI-scored</span></div>
+            <div class="venture"><div class="venture-icon">✦</div><div><strong>AI Tool Explorer</strong><small>Curated tool discovery, comparisons, and practical workflows</small></div><div class="score">92<small>score</small></div></div>
+            <div class="venture"><div class="venture-icon">⌂</div><div><strong>Homeowner Decision Guides</strong><small>Evergreen research site monetized through affiliates</small></div><div class="score">86<small>score</small></div></div>
+            <div class="venture"><div class="venture-icon">↗</div><div><strong>Niche Deal Monitor</strong><small>Automated product tracking and deal alerts</small></div><div class="score">83<small>score</small></div></div>
+          </div>
+
+          <div class="card">
+            <div class="section-head"><h2>CEO recommendation</h2><span>Updated today</span></div>
+            <div class="recommendation">
+              <div class="tag">● Priority decision</div>
+              <h3>Validate the AI Tool Explorer</h3>
+              <p>It matches the goal of learning modern tools while creating a reusable research and publishing engine.</p>
+            </div>
+            <div class="status-row"><span>Market research</span><span class="pill">Ready</span></div>
+            <div class="status-row"><span>Competitor scan</span><span class="pill">Ready</span></div>
+            <div class="status-row"><span>Landing page</span><span class="pill">Ready</span></div>
+            <div class="status-row"><span>Revenue model</span><span class="pill">Drafted</span></div>
+          </div>
+        </section>
+
+        <section class="grid activity">
+          <div class="card">
+            <div class="section-head"><h2>AI team activity</h2><span>Current build</span></div>
+            <div class="activity-item"><div class="dot"></div><div><p>Venture creation and scoring are now functional.</p><small>Forge v0.2</small></div></div>
+            <div class="activity-item"><div class="dot"></div><div><p>Board reports now summarize saved ventures.</p><small>Forge v0.2</small></div></div>
+            <div class="activity-item"><div class="dot"></div><div><p>All data stays in your browser with no API cost.</p><small>Free-tier mode</small></div></div>
+          </div>
+          <div class="card">
+            <div class="section-head"><h2>Board actions</h2><span id="boardActionCount">1 item</span></div>
+            <div class="recommendation">
+              <div class="tag">Board approval</div>
+              <h3 id="boardActionTitle">Create Venture #1</h3>
+              <p id="boardActionText">Use the New Venture form to add and score the first business concept.</p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="ventures" class="view">
+        <div class="topbar">
+          <div class="page-head"><div class="eyebrow">Portfolio</div><h2>Your ventures</h2><p>Create, score, and track business concepts without paying for APIs.</p></div>
+          <button class="btn primary open-venture">+ New venture</button>
         </div>
-        <div class="card">
-          <div class="metric-label">Ideas shortlisted</div>
-          <div class="metric-value">6</div>
-          <div class="metric-note">Top score: 92</div>
-        </div>
-        <div class="card">
-          <div class="metric-label">Active ventures</div>
-          <div class="metric-value">0</div>
-          <div class="metric-note">Ready to select #1</div>
-        </div>
-        <div class="card">
-          <div class="metric-label">Monthly operating cost</div>
-          <div class="metric-value">$0</div>
-          <div class="metric-note">Free-tier target</div>
+        <div id="ventureGrid" class="grid venture-grid"></div>
+      </section>
+
+      <section id="opportunities" class="view">
+        <div class="page-head"><div class="eyebrow">Opportunity Explorer</div><h2>Business ideas worth testing</h2><p>A practical starting set focused on low-cost, low-touch digital businesses.</p></div>
+        <div id="opportunityGrid" class="grid opportunity-grid"></div>
+      </section>
+
+      <section id="research" class="view">
+        <div class="page-head"><div class="eyebrow">Research Engine</div><h2>Research workspace</h2><p>This module will later connect to live sources. For now, it documents the validation standard we will use.</p></div>
+        <div class="grid dashboard">
+          <div class="card">
+            <div class="section-head"><h2>Validation checklist</h2><span>Required</span></div>
+            <div class="status-row"><span>Clear recurring customer pain</span><span class="pill">Required</span></div>
+            <div class="status-row"><span>Can launch below $100</span><span class="pill">Required</span></div>
+            <div class="status-row"><span>Can operate under 2 hours/week</span><span class="pill">Required</span></div>
+            <div class="status-row"><span>Has a path to recurring or affiliate revenue</span><span class="pill">Required</span></div>
+          </div>
+          <div class="card">
+            <div class="section-head"><h2>Research principle</h2><span>Locked</span></div>
+            <div class="recommendation">
+              <div class="tag">Operating rule</div>
+              <h3>Evidence before investment</h3>
+              <p>We will validate demand and distribution before paying for infrastructure, ads, or contractors.</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="grid dashboard">
-        <div class="card">
-          <div class="section-head">
-            <h2>Top opportunities</h2>
-            <span>AI-scored</span>
-          </div>
-
-          <div class="venture">
-            <div class="venture-icon">✦</div>
-            <div>
-              <strong>AI Tool Explorer</strong>
-              <small>Curated tool discovery, comparisons, and practical workflows</small>
-            </div>
-            <div class="score">92<small>score</small></div>
-          </div>
-
-          <div class="venture">
-            <div class="venture-icon">⌂</div>
-            <div>
-              <strong>Homeowner Decision Guides</strong>
-              <small>Evergreen research site monetized through affiliates</small>
-            </div>
-            <div class="score">86<small>score</small></div>
-          </div>
-
-          <div class="venture">
-            <div class="venture-icon">↗</div>
-            <div>
-              <strong>Niche Deal Monitor</strong>
-              <small>Automated product tracking and deal alerts</small>
-            </div>
-            <div class="score">83<small>score</small></div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="section-head">
-            <h2>CEO recommendation</h2>
-            <span>Updated today</span>
-          </div>
-
-          <div class="recommendation">
-            <div class="tag">● Priority decision</div>
-            <h3>Validate the AI Tool Explorer</h3>
-            <p>It matches the goal of learning modern tools while creating a reusable research and publishing engine.</p>
-          </div>
-
-          <div class="status-row"><span>Market research</span><span class="pill">Ready</span></div>
-          <div class="status-row"><span>Competitor scan</span><span class="pill">Ready</span></div>
-          <div class="status-row"><span>Landing page</span><span class="pill">Ready</span></div>
-          <div class="status-row"><span>Revenue model</span><span class="pill">Drafted</span></div>
+      <section id="agents" class="view">
+        <div class="page-head"><div class="eyebrow">AI Team</div><h2>Executive agents</h2><p>These are the functions Forge will gradually automate as we connect external services.</p></div>
+        <div class="grid opportunity-grid">
+          <div class="card"><div class="tag">CEO Agent</div><h3>Prioritization</h3><p class="sub">Scores opportunities, recommends the next decision, and prepares board summaries.</p></div>
+          <div class="card"><div class="tag">Research Agent</div><h3>Market intelligence</h3><p class="sub">Collects competitors, pricing, customer pain points, and demand signals.</p></div>
+          <div class="card"><div class="tag">Growth Agent</div><h3>Distribution</h3><p class="sub">Creates low-cost audience tests, content plans, and channel experiments.</p></div>
         </div>
       </section>
 
-      <section class="grid activity">
+      <section id="automations" class="view">
+        <div class="page-head"><div class="eyebrow">Automation</div><h2>Workflow roadmap</h2><p>We will only automate tasks after the manual workflow proves useful.</p></div>
         <div class="card">
-          <div class="section-head">
-            <h2>AI team activity</h2>
-            <span>Last 24 hours</span>
-          </div>
-
-          <div class="activity-item">
-            <div class="dot"></div>
-            <div><p>Research Agent added 8 new opportunities.</p><small>2 hours ago</small></div>
-          </div>
-          <div class="activity-item">
-            <div class="dot"></div>
-            <div><p>CEO Agent reprioritized the opportunity list.</p><small>4 hours ago</small></div>
-          </div>
-          <div class="activity-item">
-            <div class="dot"></div>
-            <div><p>Growth Agent drafted the first distribution test.</p><small>Yesterday</small></div>
-          </div>
+          <div class="status-row"><span>Weekly opportunity scan</span><span class="pill">Planned</span></div>
+          <div class="status-row"><span>Monthly board report</span><span class="pill">Prototype</span></div>
+          <div class="status-row"><span>Competitor and pricing monitor</span><span class="pill">Planned</span></div>
+          <div class="status-row"><span>Content publishing pipeline</span><span class="pill">Later</span></div>
         </div>
+      </section>
 
-        <div class="card">
-          <div class="section-head">
-            <h2>Board actions</h2>
-            <span>1 item</span>
-          </div>
-          <div class="recommendation">
-            <div class="tag">Board approval</div>
-            <h3>Select Venture #1</h3>
-            <p>Review the recommendation and approve one idea for a free validation sprint.</p>
-          </div>
-          <div class="empty">No other board action is required.</div>
+      <section id="reports" class="view">
+        <div class="topbar">
+          <div class="page-head"><div class="eyebrow">Board Reporting</div><h2>Current portfolio report</h2><p>A plain-language summary generated from the ventures saved in this browser.</p></div>
+          <button class="btn" id="refreshReport">Refresh report</button>
         </div>
+        <div class="card report-box" id="reportOutput"></div>
       </section>
     </main>
   </div>
 
+  <div class="modal-backdrop" id="ventureModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div><div class="eyebrow">New venture</div><h2>Add a business concept</h2></div>
+        <button class="icon-btn close-modal" aria-label="Close">✕</button>
+      </div>
+      <form id="ventureForm">
+        <div class="form-grid">
+          <div class="field"><label for="name">Venture name</label><input id="name" name="name" required placeholder="Example: ToolScout" /></div>
+          <div class="field"><label for="category">Category</label>
+            <select id="category" name="category">
+              <option>Content / Affiliate</option>
+              <option>Newsletter</option>
+              <option>SaaS</option>
+              <option>Marketplace</option>
+              <option>Data / Research</option>
+              <option>Local Media</option>
+            </select>
+          </div>
+          <div class="field full"><label for="problem">Problem solved</label><textarea id="problem" name="problem" required placeholder="What painful or repetitive problem does this solve?"></textarea></div>
+          <div class="field"><label for="customer">Target customer</label><input id="customer" name="customer" required placeholder="Example: Small business owners" /></div>
+          <div class="field"><label for="revenue">Revenue model</label>
+            <select id="revenue" name="revenue">
+              <option>Affiliate commissions</option>
+              <option>Subscription</option>
+              <option>Sponsorships</option>
+              <option>Lead generation</option>
+              <option>Advertising</option>
+              <option>One-time purchase</option>
+            </select>
+          </div>
+          <div class="field"><label for="automation">Automation potential</label>
+            <select id="automation" name="automation">
+              <option value="5">Very high</option>
+              <option value="4">High</option>
+              <option value="3">Moderate</option>
+              <option value="2">Low</option>
+            </select>
+          </div>
+          <div class="field"><label for="time">Time to first revenue</label>
+            <select id="time" name="time">
+              <option value="5">Under 30 days</option>
+              <option value="4">1–3 months</option>
+              <option value="3">3–6 months</option>
+              <option value="2">6–12 months</option>
+            </select>
+          </div>
+          <div class="field"><label for="cost">Launch cost</label>
+            <select id="cost" name="cost">
+              <option value="5">Under $100</option>
+              <option value="4">$100–$500</option>
+              <option value="3">$500–$2,000</option>
+              <option value="2">Over $2,000</option>
+            </select>
+          </div>
+          <div class="field"><label for="touch">Owner involvement</label>
+            <select id="touch" name="touch">
+              <option value="5">Under 1 hour/week</option>
+              <option value="4">1–2 hours/week</option>
+              <option value="3">2–5 hours/week</option>
+              <option value="2">5+ hours/week</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn close-modal">Cancel</button>
+          <button type="submit" class="btn primary">Save and score</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="reportModal">
+    <div class="modal">
+      <div class="modal-head">
+        <div><div class="eyebrow">Board report</div><h2>Forge portfolio summary</h2></div>
+        <button class="icon-btn close-report" aria-label="Close">✕</button>
+      </div>
+      <div class="report-box" id="modalReport"></div>
+      <div class="modal-actions"><button class="btn close-report">Close</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
   <script>
-    document.getElementById('ventureBtn').addEventListener('click', () => {
-      alert('Venture creation will be enabled in the next build.');
+    const opportunities = [
+      {name:"AI Tool Explorer", score:92, type:"Content / Affiliate", summary:"Test and compare AI tools for non-technical business owners.", revenue:"Affiliate links, sponsorships, premium guides"},
+      {name:"Homeowner Decision Guides", score:86, type:"Content / Affiliate", summary:"Evergreen answers for maintenance, repairs, and product choices.", revenue:"Affiliate links and lead generation"},
+      {name:"Niche Deal Monitor", score:83, type:"Data / Research", summary:"Track price drops in one carefully selected product category.", revenue:"Affiliate commissions and sponsorships"},
+      {name:"Youth Sports Planner", score:79, type:"Newsletter", summary:"Practical seasonal planning for parents, coaches, and local programs.", revenue:"Sponsorships and premium templates"},
+      {name:"Micro-SaaS Compliance Calendar", score:77, type:"SaaS", summary:"Simple reminders for one narrow, low-risk business requirement.", revenue:"Subscription"},
+      {name:"Digital Template Studio", score:74, type:"Marketplace", summary:"Automated creation and sale of useful niche templates.", revenue:"One-time purchases"}
+    ];
+
+    const storeKey = "forge_ventures_v02";
+    const getVentures = () => JSON.parse(localStorage.getItem(storeKey) || "[]");
+    const saveVentures = (items) => localStorage.setItem(storeKey, JSON.stringify(items));
+
+    function setGreeting() {
+      const hour = new Date().getHours();
+      const phrase = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+      document.getElementById("greeting").textContent = `${phrase}, Matt.`;
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2400);
+    }
+
+    function scoreVenture(data) {
+      const base = Number(data.automation) + Number(data.time) + Number(data.cost) + Number(data.touch);
+      const recurring = ["Subscription", "Sponsorships", "Lead generation", "Affiliate commissions"].includes(data.revenue) ? 3 : 1;
+      const clarity = data.problem.trim().length >= 35 ? 2 : 1;
+      return Math.min(98, Math.round(45 + base * 2.15 + recurring * 2 + clarity));
+    }
+
+    function renderOpportunities() {
+      const grid = document.getElementById("opportunityGrid");
+      grid.innerHTML = opportunities.map(o => `
+        <article class="card opportunity-card">
+          <div class="section-head"><span class="tag">${o.type}</span><div class="score">${o.score}<small>score</small></div></div>
+          <h3>${o.name}</h3>
+          <p>${o.summary}</p>
+          <div class="meta"><span class="chip">${o.revenue}</span></div>
+          <div class="card-actions"><button class="btn primary adopt-opportunity" data-name="${o.name}" data-type="${o.type}" data-summary="${o.summary}">Add as venture</button></div>
+        </article>
+      `).join("");
+
+      document.querySelectorAll(".adopt-opportunity").forEach(btn => {
+        btn.addEventListener("click", () => {
+          openVentureModal();
+          document.getElementById("name").value = btn.dataset.name;
+          document.getElementById("category").value = btn.dataset.type;
+          document.getElementById("problem").value = btn.dataset.summary;
+        });
+      });
+    }
+
+    function renderVentures() {
+      const ventures = getVentures();
+      const grid = document.getElementById("ventureGrid");
+      document.getElementById("ventureCount").textContent = ventures.length;
+      document.getElementById("ventureNote").textContent = ventures.length ? "Saved in this browser" : "Ready to select #1";
+      document.getElementById("boardActionCount").textContent = ventures.length ? "No urgent items" : "1 item";
+      document.getElementById("boardActionTitle").textContent = ventures.length ? "Review your highest score" : "Create Venture #1";
+      document.getElementById("boardActionText").textContent = ventures.length
+        ? `Current leader: ${[...ventures].sort((a,b)=>b.score-a.score)[0].name}. No additional action is required today.`
+        : "Use the New Venture form to add and score the first business concept.";
+
+      if (!ventures.length) {
+        grid.innerHTML = `<div class="empty" style="grid-column:1/-1">No ventures yet. Click <strong>New venture</strong> to add and score the first idea.</div>`;
+      } else {
+        grid.innerHTML = ventures
+          .sort((a,b)=>b.score-a.score)
+          .map((v, index) => `
+            <article class="card venture-card">
+              <div class="section-head"><span class="tag">${v.category}</span><div class="score">${v.score}<small>score</small></div></div>
+              <h3>${v.name}</h3>
+              <p>${v.problem}</p>
+              <div class="meta"><span class="chip">${v.customer}</span><span class="chip">${v.revenue}</span></div>
+              <div class="card-actions"><button class="btn danger delete-venture" data-id="${v.id}">Delete</button></div>
+            </article>
+          `).join("");
+      }
+
+      document.querySelectorAll(".delete-venture").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const next = getVentures().filter(v => v.id !== btn.dataset.id);
+          saveVentures(next);
+          renderVentures();
+          renderReport();
+          showToast("Venture removed");
+        });
+      });
+    }
+
+    function createReport() {
+      const ventures = getVentures().sort((a,b)=>b.score-a.score);
+      const date = new Date().toLocaleDateString("en-US", {month:"long", day:"numeric", year:"numeric"});
+      if (!ventures.length) {
+        return `FORGE BOARD REPORT
+${date}
+
+PORTFOLIO STATUS
+No ventures have been added yet.
+
+CEO RECOMMENDATION
+Add one business concept and use the score as a screening tool—not as a final investment decision.
+
+OPERATING COST
+$0 per month in the current local-first build.
+
+NEXT BOARD ACTION
+Create Venture #1.`;
+      }
+      const leader = ventures[0];
+      const average = Math.round(ventures.reduce((sum,v)=>sum+v.score,0)/ventures.length);
+      return `FORGE BOARD REPORT
+${date}
+
+PORTFOLIO STATUS
+${ventures.length} venture${ventures.length === 1 ? "" : "s"} saved.
+Average score: ${average}/100.
+Highest-scoring concept: ${leader.name} (${leader.score}/100).
+
+CEO RECOMMENDATION
+Validate "${leader.name}" first because it currently has the best combination of automation potential, low owner involvement, launch cost, and speed to revenue.
+
+REVENUE MODEL
+${leader.revenue}
+
+TARGET CUSTOMER
+${leader.customer}
+
+OPERATING COST
+$0 per month in the current local-first build.
+
+NEXT BOARD ACTION
+Decide whether "${leader.name}" deserves a free validation sprint.`;
+    }
+
+    function renderReport() {
+      const report = createReport();
+      document.getElementById("reportOutput").textContent = report;
+      document.getElementById("modalReport").textContent = report;
+    }
+
+    function switchView(id) {
+      document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === id));
+      document.querySelectorAll(".nav-item").forEach(n => n.classList.toggle("active", n.dataset.view === id));
+      window.scrollTo({top:0, behavior:"smooth"});
+      if (id === "reports") renderReport();
+    }
+
+    function openVentureModal() {
+      document.getElementById("ventureModal").classList.add("open");
+    }
+    function closeVentureModal() {
+      document.getElementById("ventureModal").classList.remove("open");
+    }
+
+    document.querySelectorAll(".nav-item").forEach(btn => btn.addEventListener("click", () => switchView(btn.dataset.view)));
+    document.querySelectorAll(".open-venture").forEach(btn => btn.addEventListener("click", openVentureModal));
+    document.querySelectorAll(".close-modal").forEach(btn => btn.addEventListener("click", closeVentureModal));
+
+    document.getElementById("ventureModal").addEventListener("click", e => {
+      if (e.target.id === "ventureModal") closeVentureModal();
     });
-    document.getElementById('reportBtn').addEventListener('click', () => {
-      alert('Board report module is queued for Forge v0.2.');
+
+    document.getElementById("ventureForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const form = new FormData(e.target);
+      const data = Object.fromEntries(form.entries());
+      const venture = {
+        id: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+        name: data.name.trim(),
+        category: data.category,
+        problem: data.problem.trim(),
+        customer: data.customer.trim(),
+        revenue: data.revenue,
+        score: scoreVenture(data),
+        createdAt: new Date().toISOString()
+      };
+      const ventures = getVentures();
+      ventures.push(venture);
+      saveVentures(ventures);
+      e.target.reset();
+      closeVentureModal();
+      renderVentures();
+      renderReport();
+      switchView("ventures");
+      showToast(`${venture.name} scored ${venture.score}/100`);
     });
+
+    document.getElementById("reportBtn").addEventListener("click", () => {
+      renderReport();
+      document.getElementById("reportModal").classList.add("open");
+    });
+    document.querySelectorAll(".close-report").forEach(btn => btn.addEventListener("click", () => document.getElementById("reportModal").classList.remove("open")));
+    document.getElementById("reportModal").addEventListener("click", e => {
+      if (e.target.id === "reportModal") document.getElementById("reportModal").classList.remove("open");
+    });
+    document.getElementById("refreshReport").addEventListener("click", () => {
+      renderReport();
+      showToast("Board report refreshed");
+    });
+
+    setGreeting();
+    renderOpportunities();
+    renderVentures();
+    renderReport();
   </script>
 </body>
 </html>
